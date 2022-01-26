@@ -1,0 +1,123 @@
+非终结语词在文法中无用
+
+    useless
+
+
+终端机在文法中未使用
+
+    STR
+
+
+语法中的规则无效
+
+    4 useless: STR
+
+
+状态 6 冲突：1 项偏移/归约
+状态 7 冲突：2 项偏移/归约
+
+
+语法
+
+    0 $accept: exp $end
+
+    1 exp: exp '+' exp
+    2    | exp '-' exp
+    3    | NUM
+
+
+终结语词，附有它们出现处的规则
+
+    $end (0) 0
+    '+' (43) 1
+    '-' (45) 2
+    error (256)
+    NUM <ival> (258) 3
+    STR <sval> (259)
+
+
+非终结语词，附有它们出现处的规则
+
+    $accept (7)
+        on left: 0
+    exp <ival> (8)
+        on left: 1 2 3
+        on right: 0 1 2
+
+
+状态 0
+
+    0 $accept: . exp $end
+
+    NUM  偏移，并进入状态 1
+
+    exp  转到状态 2
+
+
+状态 1
+
+    3 exp: NUM .
+
+    $default  使用规则 3 以归约 (exp)
+
+
+状态 2
+
+    0 $accept: exp . $end
+    1 exp: exp . '+' exp
+    2    | exp . '-' exp
+
+    $end  偏移，并进入状态 3
+    '+'   偏移，并进入状态 4
+    '-'   偏移，并进入状态 5
+
+
+状态 3
+
+    0 $accept: exp $end .
+
+    $default  接受
+
+
+状态 4
+
+    1 exp: exp '+' . exp
+
+    NUM  偏移，并进入状态 1
+
+    exp  转到状态 6
+
+
+状态 5
+
+    2 exp: exp '-' . exp
+
+    NUM  偏移，并进入状态 1
+
+    exp  转到状态 7
+
+
+状态 6
+
+    1 exp: exp . '+' exp
+    1    | exp '+' exp .
+    2    | exp . '-' exp
+
+    '-'  偏移，并进入状态 5
+
+    '-'       [使用规则 1 以归约 (exp)]
+    $default  使用规则 1 以归约 (exp)
+
+
+状态 7
+
+    1 exp: exp . '+' exp
+    2    | exp . '-' exp
+    2    | exp '-' exp .
+
+    '+'  偏移，并进入状态 4
+    '-'  偏移，并进入状态 5
+
+    '+'       [使用规则 2 以归约 (exp)]
+    '-'       [使用规则 2 以归约 (exp)]
+    $default  使用规则 2 以归约 (exp)
